@@ -360,7 +360,7 @@ namespace LiteDB
             {
                 var cached = _cacheScalar.GetOrAdd(expr.Source, s =>
                 {
-                    var lambda = System.Linq.Expressions.Expression.Lambda<BsonExpressionScalarDelegate>(expr.Expression, context.Source, context.Root, context.Current, context.Collation, context.Parameters);
+                    var lambda = Expression.Lambda<BsonExpressionScalarDelegate>(expr.Expression, context.Source, context.Root, context.Current, context.Collation, context.Parameters);
 
                     return lambda.Compile();
                 });
@@ -371,7 +371,7 @@ namespace LiteDB
             {
                 var cached = _cacheEnumerable.GetOrAdd(expr.Source, s =>
                 {
-                    var lambda = System.Linq.Expressions.Expression.Lambda<BsonExpressionEnumerableDelegate>(expr.Expression, context.Source, context.Root, context.Current, context.Collation, context.Parameters);
+                    var lambda = Expression.Lambda<BsonExpressionEnumerableDelegate>(expr.Expression, context.Source, context.Root, context.Current, context.Collation, context.Parameters);
 
                     return lambda.Compile();
                 });
