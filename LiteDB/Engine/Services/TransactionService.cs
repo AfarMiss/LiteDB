@@ -89,7 +89,7 @@ namespace LiteDB.Engine
         {
             ENSURE(_state == TransactionState.Active, "transaction must be active to create new snapshot");
 
-            Snapshot create() => new Snapshot(mode, collection, _header, _transactionID, _transPages, _locker, _walIndex, _reader, addIfNotExists);
+            Snapshot create() => new Snapshot(mode, collection, _header, _transactionID, _transPages, _locker, _walIndex, _reader, _disk, addIfNotExists);
 
             if (_snapshots.TryGetValue(collection, out var snapshot))
             {
@@ -266,7 +266,7 @@ namespace LiteDB.Engine
                 }
             }
 
-            // dispose all snapshosts
+            // dispose all snapshots
             foreach (var snapshot in _snapshots.Values)
             {
                 snapshot.Dispose();
@@ -291,7 +291,7 @@ namespace LiteDB.Engine
                 this.ReturnNewPages();
             }
 
-            // dispose all snaphosts
+            // dispose all snapshots
             foreach (var snapshot in _snapshots.Values)
             {
                 // but first, if writable, discard changes
@@ -387,7 +387,7 @@ namespace LiteDB.Engine
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 

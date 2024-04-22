@@ -29,8 +29,8 @@ namespace LiteDB.Engine
             {
                 var snapshot = transaction.CreateSnapshot(LockMode.Write, collection, true);
                 var collectionPage = snapshot.CollectionPage;
-                var indexer = new IndexService(snapshot, _header.Pragmas.Collation);
-                var data = new DataService(snapshot);
+                var indexer = new IndexService(snapshot, _header.Pragmas.Collation, _disk.MAX_ITEMS_COUNT);
+                var data = new DataService(snapshot, _disk.MAX_ITEMS_COUNT);
 
                 // check if index already exists
                 var current = collectionPage.GetCollectionIndex(name);
@@ -55,7 +55,7 @@ namespace LiteDB.Engine
                 {
                     using (var reader = new BufferReader(data.Read(pkNode.DataBlock)))
                     {
-                        var doc = reader.ReadDocument(expression.Fields);
+                        var doc = reader.ReadDocument(expression.Fields).GetValue();
 
                         // first/last node in this document that will be added
                         IndexNode last = null;
@@ -67,6 +67,8 @@ namespace LiteDB.Engine
                         // adding index node for each value
                         foreach (var key in keys)
                         {
+                            _state.Validate();
+
                             // insert new index node
                             var node = indexer.AddNode(index, key, pkNode.DataBlock, last);
 
@@ -106,7 +108,7 @@ namespace LiteDB.Engine
             {
                 var snapshot = transaction.CreateSnapshot(LockMode.Write, collection, false);
                 var col = snapshot.CollectionPage;
-                var indexer = new IndexService(snapshot, _header.Pragmas.Collation);
+                var indexer = new IndexService(snapshot, _header.Pragmas.Collation, _disk.MAX_ITEMS_COUNT);
             
                 // no collection, no index
                 if (col == null) return false;
