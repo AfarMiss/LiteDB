@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net4.5;netstandard1.3;netstandard2.0</TargetFrameworks>
     <AssemblyVersion>5.0.17</AssemblyVersion>
     <FileVersion>5.0.17</FileVersion>
     <VersionPrefix>5.0.17</VersionPrefix>
@@ -28,6 +27,8 @@
     <SignAssembly Condition="'$(OS)'=='Windows_NT'">true</SignAssembly>
     <AssemblyOriginatorKeyFile Condition="'$(Configuration)' == 'Release'">LiteDB.snk</AssemblyOriginatorKeyFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.3</LangVersion>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
   </PropertyGroup>
   
   <!--
